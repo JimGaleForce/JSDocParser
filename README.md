@@ -30,5 +30,5 @@ parsed.Function[0].Parameters.Count == 2
 parsed.Function[0].Parameters[0].Name == "text"
 parsed.Function[0].Parameters[0].Type == "string"
 parsed.Function[0].Parameters[0].Description == "Text to display on the tile."
-parsed.Function[0].Parameters[1].Default == "10"
+parsed.Function[0].Parameters[1].Default == "10" //retrieved from signature line, not from docs
 ```
