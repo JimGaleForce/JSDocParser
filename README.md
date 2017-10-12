@@ -1,6 +1,8 @@
 # JSDocParser
 Lightweight simple JSDoc documentation parser for .NET
 
+Purpose: Read javascript files and parse JSDoc style documentation (within code), available in a .NET (C# project).
+
 # Quick mini-doc (before doing it for real)
 ```C#
 var js = new JSDocParser();
