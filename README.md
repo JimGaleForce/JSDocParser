@@ -26,7 +26,7 @@ function createTile(text, durationSeconds = 10) {
 would result in this result from js.Parse(...):
 
 ```C#
-parsed.Function.Count == 2
+parsed.Function.Count == 1
 parsed.Function[0].Name == "createTile"
 parsed.Function[0].Parameters.Count == 2
 parsed.Function[0].Parameters[0].Name == "text"
