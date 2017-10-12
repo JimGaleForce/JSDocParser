@@ -6,7 +6,7 @@ Purpose: Read javascript files and parse JSDoc style documentation (within code)
 # Quick mini-doc (before doing it for real)
 ```C#
 var js = new JSDocParser();
-var parsed = js.Parse("test1.js"); //filename, later will add text to allow http retrieval.
+var parsed = js.Parse("test1.js"); 
 ```
 
 This js code:

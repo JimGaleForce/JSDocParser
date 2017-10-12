@@ -20,6 +20,11 @@ namespace DocParser
             text = System.IO.File.ReadAllText(filename);
         }
 
+        public void LoadText(string text)
+        {
+            this.text = text;
+        }
+
         public JSDocParsed Parse(string filename = null)
         {
             if (filename != null)
