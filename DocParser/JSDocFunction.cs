@@ -21,10 +21,9 @@ namespace DocParser
         public List<JSDocParam> Parameters { get; set; } = new List<JSDocParam>();
         public JSDocParam Returns { get; set; }
 
-        internal void ParseSpecifics(List<KeyValuePair<string,string>> items,
-            string previousLine, string nextLine)
+        internal override void Parse(JSDocItems items)
         {
-            foreach (var item in items)
+            foreach (var item in items.List)
             {
                 switch (item.Key)
                 {
@@ -67,8 +66,8 @@ namespace DocParser
 
             if (string.IsNullOrWhiteSpace(this.Name))
             {
-                var fnLine = (previousLine != null && previousLine.Contains("function")) ? previousLine :
-                    (nextLine != null && nextLine.Contains("function")) ? nextLine : string.Empty;
+                var fnLine = (items.PreviousLine != null && items.PreviousLine.Contains("function")) ? items.PreviousLine :
+                    (items.NextLine != null && items.NextLine.Contains("function")) ? items.NextLine : string.Empty;
 
                 if (!string.IsNullOrWhiteSpace(fnLine))
                 {

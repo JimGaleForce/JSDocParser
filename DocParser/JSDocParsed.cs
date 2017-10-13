@@ -16,6 +16,7 @@ namespace DocParser
     public class JSDocParsed
     {
         public List<JSDocFunction> Functions { get; set; } = new List<JSDocFunction>();
+        public JSDocFile File { get; set; }
 
         public void Parse(string text)
         {
@@ -23,14 +24,16 @@ namespace DocParser
             foreach (var block in blocks)
             {
                 var node = JSDocNode.Parse(block);
-
-                var function = JSDocFunction.Parse(block.Text, block.PreviousLine, block.NextLine);
-                if (!string.IsNullOrWhiteSpace(function?.Name))
+                if (node is JSDocFunction && !string.IsNullOrWhiteSpace(node?.Name))
                 {
-                    Functions.Add(function);
+                    Functions.Add(node as JSDocFunction);
+                }
+
+                if (node is JSDocFile)
+                {
+                    File = node as JSDocFile;
                 }
             }
-        }
-
+        }                    
     }
 }

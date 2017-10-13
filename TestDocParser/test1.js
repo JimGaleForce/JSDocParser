@@ -1,4 +1,9 @@
 ﻿/**
+ * @file
+ * The tile feature set.
+ */
+
+/**
  * createTile
  *
  * @param {string} text Text to display on the tile.
@@ -25,6 +30,11 @@ function createTile(text, durationSeconds = 10) {
 
 document.addEventListener("DOMContentLoaded", createTile, false);
 
+/** This is a short description of the nothing function. */
+function nothing() {
+
+}
+
 /**
  * createSecondaryTile creates a secondary tile.
  *
@@ -33,7 +43,7 @@ document.addEventListener("DOMContentLoaded", createTile, false);
  * @param {string} tileId Id of the secondary tile (so it can be replaced by a matching id). Defaults to the activationArguments.
  * @param {string} logoUri Uri of the logo to display on the tile.
  * @param {string} uriSmallLogo Uri of the small logo to display on the tile.
- *
+ * @returns {Promise} promise.
  */
 function createSecondaryTile(text, activationArguments, tileId = null, logoUri = null, uriSmallLogo = null) {
     var currentTime = new Date();
