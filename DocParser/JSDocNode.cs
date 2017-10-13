@@ -1,36 +1,34 @@
-﻿//*********************************************************
-//
-// Copyright (c) Microsoft. All rights reserved.
-// This code is licensed under the MIT License (MIT).
-// THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
-// IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
-// PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
-//
-//*********************************************************
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DocParser
 {
-    public class JSDocFunction : JSDocNode
+    public class JSDocNode
     {
-        public List<JSDocParam> Parameters { get; set; } = new List<JSDocParam>();
-        public JSDocParam Returns { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
-        internal void ParseSpecifics(List<KeyValuePair<string,string>> items,
-            string previousLine, string nextLine)
+        private JSDocNode GetSpecificType(JSDocItems items)
         {
+
+        }
+
+        public static JSDocNode Parse(JSDocSplitSet set)
+        {
+            var items = JSDocHelper.GetItems(set.Text);
+
+            var result = JSDocNode.GetSpecificType(items);
+
             foreach (var item in items)
             {
                 switch (item.Key)
                 {
                     case "param":
                         {
-                            this.Parameters.Add(JSDocParam.Parse(item.Value));
+                            func.Parameters.Add(JSDocParam.Parse(item.Value));
                             break;
                         }
                     case "function":
@@ -40,7 +38,7 @@ namespace DocParser
                         {
                             if (!string.IsNullOrWhiteSpace(item.Value))
                             {
-                                this.Name = item.Value;
+                                func.Name = item.Value;
                             }
 
                             break;
@@ -48,13 +46,13 @@ namespace DocParser
                     case "returns":
                     case "return":
                         {
-                            this.Returns = JSDocParam.Parse(item.Value);
+                            func.Returns = JSDocParam.Parse(item.Value);
 
                             break;
                         }
                     case "":
                         {
-                            this.Description = item.Value;
+                            func.Description = item.Value;
                             break;
                         }
                     default:
@@ -65,7 +63,7 @@ namespace DocParser
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(this.Name))
+            if (string.IsNullOrWhiteSpace(func.Name))
             {
                 var fnLine = (previousLine != null && previousLine.Contains("function")) ? previousLine :
                     (nextLine != null && nextLine.Contains("function")) ? nextLine : string.Empty;
@@ -82,7 +80,7 @@ namespace DocParser
                             var beforeEquals = before.Substring(0, iEquals).Trim();
                             var lastWord = beforeEquals.Split(new[] { ' ' }).LastOrDefault();
 
-                            this.Name = lastWord;
+                            func.Name = lastWord;
                         }
                     }
                     else
@@ -90,7 +88,7 @@ namespace DocParser
                         var words = fnLine.Substring(index + 8).Trim().Split(new[] { ' ', '(' });
                         if (words.Length > 0)
                         {
-                            this.Name = words[0];
+                            func.Name = words[0];
                         }
                     }
 
@@ -105,7 +103,7 @@ namespace DocParser
                                 var segments = parm.Split(new[] { '=', ' ' }, StringSplitOptions.RemoveEmptyEntries);
                                 if (segments.Length > 1)
                                 {
-                                    var subparm = this.Parameters.FirstOrDefault(p => p.Name.Equals(segments[0]));
+                                    var subparm = func.Parameters.FirstOrDefault(p => p.Name.Equals(segments[0]));
                                     if (subparm != null)
                                     {
                                         subparm.Default = segments[1].Trim();
@@ -116,6 +114,8 @@ namespace DocParser
                     }
                 }
             }
+
+            return func;
         }
     }
 }

@@ -22,6 +22,8 @@ namespace DocParser
             var blocks = JSDocHelper.SpecialSplit(text, "/**", "*/");
             foreach (var block in blocks)
             {
+                var node = JSDocNode.Parse(block);
+
                 var function = JSDocFunction.Parse(block.Text, block.PreviousLine, block.NextLine);
                 if (!string.IsNullOrWhiteSpace(function?.Name))
                 {
