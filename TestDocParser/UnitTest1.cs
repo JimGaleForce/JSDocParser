@@ -31,11 +31,13 @@ namespace TestDocParser
         {
             var data = js.Parse("test1.js");
 
-            Assert.AreEqual(data.Functions.Count, 2);
+            Assert.AreEqual(data.Functions.Count, 3);
             Assert.AreEqual(data.Functions[0].Parameters.Count, 2);
-            Assert.AreEqual(data.Functions[1].Parameters.Count, 5);
+            Assert.AreEqual(data.Functions[1].Parameters.Count, 0);
+            Assert.AreEqual(data.Functions[1].Name, "nothing");
+            Assert.AreEqual(data.Functions[2].Parameters.Count, 5);
             Assert.AreEqual(data.Functions[0].Name, "createTile");
-            Assert.AreEqual(data.Functions[1].Name, "createSecondaryTile");
+            Assert.AreEqual(data.Functions[2].Name, "createSecondaryTile");
             Assert.AreEqual(data.Functions[0].Parameters[0].Type, "string");
         }
     }

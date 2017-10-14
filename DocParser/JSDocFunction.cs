@@ -23,6 +23,8 @@ namespace DocParser
 
         internal override void Parse(JSDocItems items)
         {
+            base.Parse(items);
+
             foreach (var item in items.List)
             {
                 switch (item.Key)
@@ -35,7 +37,6 @@ namespace DocParser
                     case "function":
                     case "func":
                     case "method":
-                    case "name":
                         {
                             if (!string.IsNullOrWhiteSpace(item.Value))
                             {
@@ -49,16 +50,6 @@ namespace DocParser
                         {
                             this.Returns = JSDocParam.Parse(item.Value);
 
-                            break;
-                        }
-                    case "":
-                        {
-                            this.Description = item.Value;
-                            break;
-                        }
-                    default:
-                        {
-                            Debug.WriteLine("unknown key: " + item.Key);
                             break;
                         }
                 }

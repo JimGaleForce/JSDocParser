@@ -34,11 +34,37 @@ namespace DocParser
                 }
             }
 
+            if ((items.PreviousLine != null && items.PreviousLine.Contains("function"))
+                || (items.NextLine != null && items.NextLine.Contains("function")))
+            {
+                return new JSDocFunction();
+            }
+
             return new JSDocNode();
         }
 
         internal virtual void Parse(JSDocItems items)
-        {   
+        {
+            foreach (var item in items.List)
+            {
+                switch (item.Key)
+                {
+                    case "name":
+                    {
+                        if (!string.IsNullOrWhiteSpace(item.Value))
+                        {
+                            this.Name = item.Value;
+                        }
+
+                        break;
+                    }
+                    case "":
+                    {
+                        this.Description = item.Value;
+                        break;
+                    }
+                }
+            }
         }
 
         public static JSDocNode Parse(JSDocSplitSet set)
@@ -46,27 +72,6 @@ namespace DocParser
             var items = JSDocHelper.GetItems(set);
 
             var result = JSDocNode.GetSpecificType(items);
-
-            foreach (var item in items.List)
-            {
-                switch (item.Key)
-                {
-                    case "name":
-                        {
-                            if (!string.IsNullOrWhiteSpace(item.Value))
-                            {
-                                result.Name = item.Value;
-                            }
-
-                            break;
-                        }
-                    case "":
-                        {
-                            result.Description = item.Value;
-                            break;
-                        }
-                }
-            }
 
             result.Parse(items);
 

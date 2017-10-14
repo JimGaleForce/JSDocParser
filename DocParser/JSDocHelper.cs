@@ -29,14 +29,25 @@ namespace DocParser
             {
                 if (line.StartsWith("@"))
                 {
-                    results.List.Add(new KeyValuePair<string, string>(key, sb.ToString().Trim()));
+                    if (!string.IsNullOrWhiteSpace(key) || !string.IsNullOrWhiteSpace(sb.ToString()))
+                    {
+                        results.List.Add(new KeyValuePair<string, string>(key, sb.ToString().Trim()));
+                    }
+
                     sb.Clear();
 
                     var iAt = line.IndexOf(' ');
                     if (iAt > -1)
                     {
-                        key = line.Substring(1, iAt-1);
+                        key = line.Substring(1, iAt - 1);
                         sb.Append(line.Substring(iAt + 1) + ' ');
+                    }
+                    else
+                    {
+                        // issue: if an @indicator is alone on a line, followed by the actual text, this will miss it.
+                        key = line.Substring(1).Trim();
+                        results.List.Add(new KeyValuePair<string, string>(key, sb.ToString().Trim()));
+                        key = string.Empty;
                     }
                 }
                 else
