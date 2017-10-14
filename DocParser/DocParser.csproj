@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="JSDocFunction.cs" />
     <Compile Include="JSDocHelper.cs" />
+    <Compile Include="JSDocItems.cs" />
+    <Compile Include="JSDocNode.cs" />
     <Compile Include="JSDocParam.cs" />
     <Compile Include="JSDocParsed.cs" />
     <Compile Include="JSDocParser.cs" />
