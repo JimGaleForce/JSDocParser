@@ -36,11 +36,11 @@ namespace DocParser
 
                     sb.Clear();
 
-                    var iAt = line.IndexOf(' ');
-                    if (iAt > -1)
+                    var index = line.IndexOf(' ');
+                    if (index > -1)
                     {
-                        key = line.Substring(1, iAt - 1);
-                        sb.Append(line.Substring(iAt + 1) + ' ');
+                        key = line.Substring(1, index - 1);
+                        sb.Append(line.Substring(index + 1) + ' ');
                     }
                     else
                     {
@@ -77,10 +77,10 @@ namespace DocParser
             foreach (var fullline in lines)
             {
                 var line = fullline.Trim();
-                var iAt = line.IndexOf('*');
-                if (iAt > -1)
+                var index = line.IndexOf('*');
+                if (index > -1)
                 {
-                    line = line.Substring(iAt + 1).Trim();
+                    line = line.Substring(index + 1).Trim();
                 }
 
                 if (string.IsNullOrWhiteSpace(line))
@@ -96,10 +96,10 @@ namespace DocParser
 
         public static string[] SplitFrom(string text, string from, string between)
         {
-            var iAt = text.IndexOf(from);
-            if (iAt>-1)
+            var index = text.IndexOf(from);
+            if (index>-1)
             {
-                text = text.Substring(iAt + from.Length);
+                text = text.Substring(index + from.Length);
             }
 
             return text.Split(new string[] { between }, StringSplitOptions.RemoveEmptyEntries);
@@ -108,18 +108,18 @@ namespace DocParser
         public static string[] Split(string text, string left, string right)
         {
             var list = new List<string>();
-            var iAt = -1;
-            iAt = text.IndexOf(left, iAt+1);
-            while (iAt>-1)
+            var indexLeft = -1;
+            indexLeft = text.IndexOf(left, indexLeft+1);
+            while (indexLeft>-1)
             {
-                var iAt2 = text.IndexOf(right, iAt+left.Length);
-                if (iAt2>-1)
+                var indexRight = text.IndexOf(right, indexLeft+left.Length);
+                if (indexRight>-1)
                 {
-                    list.Add(text.Substring(iAt+left.Length, iAt2 - iAt - left.Length));
-                    iAt = iAt2;
+                    list.Add(text.Substring(indexLeft+left.Length, indexRight - indexLeft - left.Length));
+                    indexLeft = indexRight;
                 }
 
-                iAt = text.IndexOf(left, iAt + 1);
+                indexLeft = text.IndexOf(left, indexLeft + 1);
             }
 
             return list.ToArray();
@@ -128,39 +128,39 @@ namespace DocParser
         public static JSDocSplitSet[] SpecialSplit(string text, string left, string right)
         {
             var list = new List<JSDocSplitSet>();
-            var iAt = -1;
-            iAt = text.IndexOf(left, iAt + 1);
-            while (iAt > -1)
+            var indexLeft = -1;
+            indexLeft = text.IndexOf(left, indexLeft + 1);
+            while (indexLeft > -1)
             {
-                var iAt2 = text.IndexOf(right, iAt + left.Length);
-                if (iAt2 > -1)
+                var indexRight = text.IndexOf(right, indexLeft + left.Length);
+                if (indexRight > -1)
                 {
                     var result = new JSDocSplitSet();
 
-                    if (iAt > 0)
+                    if (indexLeft > 0)
                     {
-                        var before = JSDocHelper.PreviousLine(text, iAt);
+                        var before = JSDocHelper.PreviousLine(text, indexLeft);
                         if (before.ToLowerInvariant().Contains("function"))
                         {
                             result.PreviousLine = before;
                         }
                     }
 
-                    if (iAt2 > -1) { 
-                        var after = JSDocHelper.NextLine(text, iAt2);
+                    if (indexRight > -1) { 
+                        var after = JSDocHelper.NextLine(text, indexRight);
                         if (after.ToLowerInvariant().Contains("function"))
                         {
                             result.NextLine = after;
                         }
                     }
 
-                    result.Text = text.Substring(iAt + left.Length, iAt2 - iAt - left.Length);
+                    result.Text = text.Substring(indexLeft + left.Length, indexRight - indexLeft - left.Length);
 
                     list.Add(result);
-                    iAt = iAt2;
+                    indexLeft = indexRight;
                 }
 
-                iAt = text.IndexOf(left, iAt + 1);
+                indexLeft = text.IndexOf(left, indexLeft + 1);
             }
 
             return list.ToArray();
@@ -168,8 +168,8 @@ namespace DocParser
 
         public static string PreviousLine(string text, int index)
         {
-            var iAt = text.LastIndexOf("\n", index);
-            if (iAt == -1)
+            var indexLeft = text.LastIndexOf("\n", index);
+            if (indexLeft == -1)
             {
                 return string.Empty;
             }
@@ -178,16 +178,16 @@ namespace DocParser
             var valid = false;
             while (!valid)
             {
-                var iAt2 = text.LastIndexOf("\n", iAt - 1);
-                while (iAt2 > -1 && iAt - iAt2 == 1)
+                var indexRight = text.LastIndexOf("\n", indexLeft - 1);
+                while (indexRight > -1 && indexLeft - indexRight == 1)
                 {
-                    iAt = iAt2;
-                    iAt2 = text.LastIndexOf("\n", iAt - 1);
+                    indexLeft = indexRight;
+                    indexRight = text.LastIndexOf("\n", indexLeft - 1);
                 }
 
-                if (iAt2 > -1)
+                if (indexRight > -1)
                 {
-                    line = text.Substring(iAt2 + 1, iAt - iAt2).Trim();
+                    line = text.Substring(indexRight + 1, indexLeft - indexRight).Trim();
                     valid = !string.IsNullOrWhiteSpace(line);
                 }
                 else
@@ -195,8 +195,8 @@ namespace DocParser
                     break;
                 }
 
-                iAt = iAt2;
-                iAt2 = text.LastIndexOf("\n", iAt - 1);
+                indexLeft = indexRight;
+                indexRight = text.LastIndexOf("\n", indexLeft - 1);
             }
 
             return line;
@@ -204,8 +204,8 @@ namespace DocParser
 
         public static string NextLine(string text, int index)
         {
-            var iAt = text.IndexOf("\n", index);
-            if (iAt == -1)
+            var indexLeft = text.IndexOf("\n", index);
+            if (indexLeft == -1)
             {
                 return text;
             }
@@ -214,27 +214,27 @@ namespace DocParser
             var valid = false;
             while (!valid)
             {
-                var iAt2 = text.IndexOf("\n", iAt + 1);
-                while (iAt2 - iAt == 1)
+                var indexRight = text.IndexOf("\n", indexLeft + 1);
+                while (indexRight - indexLeft == 1)
                 {
-                    iAt = iAt2;
-                    iAt2 = text.IndexOf("\n", iAt + 1);
+                    indexLeft = indexRight;
+                    indexRight = text.IndexOf("\n", indexLeft + 1);
                 }
 
-                if (iAt2 > -1)
+                if (indexRight > -1)
                 {
-                    line = text.Substring(iAt + 1, iAt2 - iAt).Trim();
+                    line = text.Substring(indexLeft + 1, indexRight - indexLeft).Trim();
                     valid = !string.IsNullOrWhiteSpace(line);
                 }
                 else
                 {
-                    line = text.Substring(iAt + 1).Trim();
+                    line = text.Substring(indexLeft + 1).Trim();
                     valid = !string.IsNullOrWhiteSpace(line);
                     break;
                 }
 
-                iAt = iAt2;
-                iAt2 = text.IndexOf("\n", iAt + 1);
+                indexLeft = indexRight;
+                indexRight = text.IndexOf("\n", indexLeft + 1);
             }
 
             return line;
@@ -242,14 +242,14 @@ namespace DocParser
 
         public static string After(string text, string after, bool wholeIfMissing = true)
         {
-            var iAt = text.IndexOf(after);
-            return iAt == -1 ? ((wholeIfMissing) ? text : string.Empty) : text.Substring(iAt + after.Length);
+            var index = text.IndexOf(after);
+            return index == -1 ? ((wholeIfMissing) ? text : string.Empty) : text.Substring(index + after.Length);
         }
 
         public static string Before(string text, string before, bool wholeIfMissing = true)
         {
-            var iAt = text.IndexOf(before);
-            return iAt == -1 ? ((wholeIfMissing) ? text : string.Empty) : text.Substring(0, iAt);
+            var index = text.IndexOf(before);
+            return index == -1 ? ((wholeIfMissing) ? text : string.Empty) : text.Substring(0, index);
         }
     }
 }
