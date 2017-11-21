@@ -14,6 +14,7 @@ namespace DocParser
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Comments { get; set; }
 
         private static JSDocNode GetSpecificType(JSDocItems items)
         {
@@ -67,11 +68,15 @@ namespace DocParser
             }
         }
 
-        public static JSDocNode Parse(JSDocSplitSet set)
+        public static JSDocNode Parse(JSDocSplitSet set, bool includeComments)
         {
             var items = JSDocHelper.GetItems(set);
 
             var result = JSDocNode.GetSpecificType(items);
+            if (includeComments)
+            {
+                result.Comments = set.Text;
+            }
 
             result.Parse(items);
 

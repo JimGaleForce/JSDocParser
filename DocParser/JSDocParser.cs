@@ -25,7 +25,7 @@ namespace DocParser
             this.text = text;
         }
 
-        public JSDocParsed Parse(string filename = null)
+        public JSDocParsed Parse(string filename = null, bool includeComments = false)
         {
             if (filename != null)
             {
@@ -33,7 +33,7 @@ namespace DocParser
             }
 
             var result = new JSDocParsed();
-            result.Parse(text);
+            result.Parse(text, includeComments);
             return result;
         }
     }

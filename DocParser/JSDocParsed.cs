@@ -18,12 +18,12 @@ namespace DocParser
         public List<JSDocFunction> Functions { get; set; } = new List<JSDocFunction>();
         public JSDocFile File { get; set; }
 
-        public void Parse(string text)
+        public void Parse(string text, bool includeComments)
         {
             var blocks = JSDocHelper.SpecialSplit(text, "/**", "*/");
             foreach (var block in blocks)
             {
-                var node = JSDocNode.Parse(block);
+                var node = JSDocNode.Parse(block, includeComments);
                 if (node is JSDocFunction && !string.IsNullOrWhiteSpace(node?.Name))
                 {
                     Functions.Add(node as JSDocFunction);
