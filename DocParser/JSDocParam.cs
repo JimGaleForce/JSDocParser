@@ -32,6 +32,11 @@ namespace DocParser
             if (nameDescription.Length > 0)
             {
                 result.Name = JSDocHelper.Before(nameDescription, " ");
+                if (result.Name.EndsWith("."))
+                {
+                    result.Name = result.Name.Substring(0, result.Name.Length - 1);
+                }
+
                 result.Description = JSDocHelper.After(nameDescription, " ");
             }
 
