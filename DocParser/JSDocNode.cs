@@ -15,7 +15,7 @@ namespace DocParser
         public string Name { get; set; }
         public string Description { get; set; }
         public string Comments { get; set; }
-
+        public string Image { get; set; }
         private static JSDocNode GetSpecificType(JSDocItems items)
         {
             foreach (var item in items.List)
@@ -57,6 +57,15 @@ namespace DocParser
                             this.Name = item.Value;
                         }
 
+                        break;
+                    }
+                    case "see":
+                    {
+                        var ext = item.Value.ToLowerInvariant();
+                        if (ext.EndsWith(".png") || ext.EndsWith(".jpg"))
+                        {
+                            this.Image = item.Value;
+                        }
                         break;
                     }
                     case "":

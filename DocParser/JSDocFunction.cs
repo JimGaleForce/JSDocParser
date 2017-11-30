@@ -34,6 +34,7 @@ namespace DocParser
                             this.Parameters.Add(JSDocParam.Parse(item.Value));
                             break;
                         }
+
                     case "function":
                     case "func":
                     case "method":
