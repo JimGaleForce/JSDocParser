@@ -13,8 +13,9 @@ namespace DocParser
     public class JSDocNode
     {
         public string Name { get; set; }
+        public string Method { get; set; }
         public string Description { get; set; }
-        public string Comments { get; set; }
+        public string Snippet { get; set; }
         public string Image { get; set; }
         private static JSDocNode GetSpecificType(JSDocItems items)
         {
@@ -84,7 +85,7 @@ namespace DocParser
             var result = JSDocNode.GetSpecificType(items);
             if (includeComments)
             {
-                result.Comments = set.Text;
+                result.Snippet = set.Text;
             }
 
             result.Parse(items);

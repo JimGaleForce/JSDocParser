@@ -36,8 +36,10 @@ namespace TestDocParser
             Assert.AreEqual(data.Functions[1].Parameters.Count, 0);
             Assert.AreEqual(data.Functions[1].Name, "nothing");
             Assert.AreEqual(data.Functions[2].Parameters.Count, 5);
-            Assert.AreEqual(data.Functions[0].Name, "createTile");
-            Assert.AreEqual(data.Functions[2].Name, "createSecondaryTile");
+            Assert.AreEqual(data.Functions[0].Name, "Create Tile");
+            Assert.AreEqual(data.Functions[2].Name, "Create Secondary Tile");
+            Assert.AreEqual(data.Functions[0].Method, "createTile");
+            Assert.AreEqual(data.Functions[2].Method, "createSecondaryTile");
             Assert.AreEqual(data.Functions[0].Parameters[0].Type, "string");
         }
     }
