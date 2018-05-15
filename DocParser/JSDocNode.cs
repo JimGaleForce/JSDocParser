@@ -13,8 +13,10 @@ namespace DocParser
     public class JSDocNode
     {
         public string Name { get; set; }
+        public string Method { get; set; }
         public string Description { get; set; }
-
+        public string Snippet { get; set; }
+        public string Image { get; set; }
         private static JSDocNode GetSpecificType(JSDocItems items)
         {
             foreach (var item in items.List)
@@ -58,6 +60,15 @@ namespace DocParser
 
                         break;
                     }
+                    case "see":
+                    {
+                        var ext = item.Value.ToLowerInvariant();
+                        if (ext.EndsWith(".png") || ext.EndsWith(".jpg"))
+                        {
+                            this.Image = item.Value;
+                        }
+                        break;
+                    }
                     case "":
                     {
                         this.Description = item.Value;
@@ -67,11 +78,15 @@ namespace DocParser
             }
         }
 
-        public static JSDocNode Parse(JSDocSplitSet set)
+        public static JSDocNode Parse(JSDocSplitSet set, bool includeComments)
         {
             var items = JSDocHelper.GetItems(set);
 
             var result = JSDocNode.GetSpecificType(items);
+            if (includeComments)
+            {
+                result.Snippet = set.Text;
+            }
 
             result.Parse(items);
 

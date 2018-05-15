@@ -28,12 +28,29 @@ namespace DocParser
                 result.Type = types[0];
             }
 
-            var nameDescription = JSDocHelper.After(text, "}").Trim();
-            if (nameDescription.Length > 0)
+            var paramDefault = JSDocHelper.Split(text, "[", "]");
+            if (paramDefault.Length > 0)
             {
-                result.Name = JSDocHelper.Before(nameDescription, " ");
-                result.Description = JSDocHelper.After(nameDescription, " ");
+                result.Name = JSDocHelper.Before(paramDefault[0], "=").Trim();
+                result.Default = JSDocHelper.After(paramDefault[0], "=").Trim();
+                result.Description = JSDocHelper.After(text, "]").Trim();
             }
+            else
+            {
+                var nameDescription = JSDocHelper.After(text, "}").Trim();
+                if (nameDescription.Length > 0)
+                {
+                    result.Name = JSDocHelper.Before(nameDescription, " ");
+                    if (result.Name.EndsWith("."))
+                    {
+                        result.Name = result.Name.Substring(0, result.Name.Length - 1);
+                    }
+
+                    result.Description = JSDocHelper.After(nameDescription, " ");
+                }
+            }
+
+
 
             return result;
         }
