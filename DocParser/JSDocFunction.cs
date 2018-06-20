@@ -36,8 +36,17 @@ namespace DocParser
                         }
 
                     case "function":
-                    case "func":
                     case "method":
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.Value))
+                            {
+                                this.Method = item.Value;
+                            }
+
+                            break;
+                        }
+                    case "func":
+                    case "alias":
                         {
                             if (!string.IsNullOrWhiteSpace(item.Value))
                             {
